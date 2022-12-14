@@ -12,19 +12,10 @@ CREATE TABLE passengers(
     first_name varchar(20) CHECK (first_name != ''),
     last_name varchar(20) CHECK (last_name != ''),
     date_birth date,
-    passport varchar(20) NOT NULL UNIQUE CHECK (passport like '____ ______'),
-    phone varchar(20) UNIQUE,
-    email text
+    passport varchar(20) NOT NULL UNIQUE CHECK (passport ~ '^[0-9]{10}$'),
+    phone varchar(20) UNIQUE CHECK (phone ~ '^\+7[0-9]{10}$'),
+    email text CHECK (email ~ '^[a-z0-9]+@[a-z0-9]+\.[a-z0-9]+$')
 );
-
-insert into passengers
-    (first_name,
-     last_name,
-     passport)
-    values
-    ('123',
-     'hello',
-     '1234 123456');
 
 -- Создание таблицы с информацией о компаниях
 DROP TABLE IF EXISTS companies CASCADE;
@@ -52,7 +43,7 @@ CREATE TABLE airplanes(
     company_id integer REFERENCES companies (company_id),
     manufacturer text NOT NULL,
     airplane_name text NOT NULL UNIQUE,
-    date_of_create date
+    date_of_create date NOT NULL
 );
 
 -- Создание таблицы с информацией о рейсах
@@ -63,13 +54,17 @@ CREATE TABLE flights(
     airplane_id integer REFERENCES airplanes (airplane_id),
     number varchar(20),
     start_time timestamp NOT NULL,
-    end_time timestamp NOT NULL,
+    end_time timestamp NOT NULL CHECK(end_time > start_time),
     start_city varchar(20) NOT NULL,
     end_city varchar(20) NOT NULL
 );
 
+-- Хотелось бы такие проверки добавить, но нельзя(
+-- ALTER TABLE flights
+--     ADD CONSTRAINT start_time_check CHECK(flights.start_time > (SELECT planes.date_of_create FROM airplanes as planes where planes.airplane_id = flights.airplane_id));
+
 -- Создание таблицы с информацией о версиях рейсов
-DROP TABLE IF EXISTS flights_history CASCADE;
+DROP TABLE IF EXISTS flights_history;
 CREATE TABLE flights_history(
     id serial PRIMARY KEY NOT NULL,
     flight_id integer REFERENCES flights (flight_id),
@@ -86,8 +81,7 @@ CREATE TABLE flights_history(
 -- Создание таблицы с информацией о расписании
 DROP TABLE IF EXISTS schedule CASCADE;
 CREATE TABLE schedule(
-    id integer REFERENCES  flights(flight_id),
-    CONSTRAINT PI
+    id integer REFERENCES  flights(flight_id)
 );
 
 -- Создание таблицы с информацией о билетах
@@ -96,11 +90,11 @@ CREATE TABLE tickets(
     ticket_id serial PRIMARY KEY NOT NULL,
     passenger_id integer REFERENCES passengers (passenger_id),
     flight_id integer REFERENCES flights (flight_id),
-    number varchar(20)
+    number varchar(20) CHECK (number ~ '^[0-9]{1}[0-9]{1}[A-Z]{1}$')
 );
 
 --Создание таблицы с информацией о расписании работников
-DROP TABLE IF EXISTS schedule_employees CASCADE;
+DROP TABLE IF EXISTS schedule_employees;
 CREATE TABLE schedule_employees(
     flight_id integer REFERENCES flights (flight_id),
     employee_id integer REFERENCES employees (employee_id),
