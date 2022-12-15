@@ -29,7 +29,7 @@ CREATE TABLE companies(
 DROP TABLE IF EXISTS employees CASCADE;
 CREATE TABLE employees(
     employee_id serial PRIMARY KEY NOT NULL,
-    company_id integer REFERENCES companies (company_id),
+    company_id integer REFERENCES companies (company_id)  ON DELETE CASCADE,
     first_name varchar(20) CHECK (first_name != ''),
     last_name varchar(20) CHECK (last_name != ''),
     job_title text,
@@ -40,7 +40,7 @@ CREATE TABLE employees(
 DROP TABLE IF EXISTS airplanes CASCADE;
 CREATE TABLE airplanes(
     airplane_id serial PRIMARY KEY NOT NULL,
-    company_id integer REFERENCES companies (company_id),
+    company_id integer REFERENCES companies (company_id) ON DELETE CASCADE,
     manufacturer text NOT NULL,
     airplane_name text NOT NULL UNIQUE,
     date_of_create date NOT NULL
@@ -50,8 +50,8 @@ CREATE TABLE airplanes(
 DROP TABLE IF EXISTS flights CASCADE;
 CREATE TABLE flights(
     flight_id serial PRIMARY KEY NOT NULL,
-    company_id integer REFERENCES companies (company_id),
-    airplane_id integer REFERENCES airplanes (airplane_id),
+    company_id integer REFERENCES companies (company_id) ON DELETE CASCADE,
+    airplane_id integer REFERENCES airplanes (airplane_id) ON DELETE CASCADE,
     number varchar(20),
     start_time timestamp NOT NULL,
     end_time timestamp NOT NULL CHECK(end_time > start_time),
@@ -67,9 +67,9 @@ CREATE TABLE flights(
 DROP TABLE IF EXISTS flights_history;
 CREATE TABLE flights_history(
     id serial PRIMARY KEY NOT NULL,
-    flight_id integer REFERENCES flights (flight_id),
-    company_id integer REFERENCES companies (company_id),
-    airplane_id integer REFERENCES airplanes (airplane_id),
+    flight_id integer REFERENCES flights (flight_id) ON DELETE CASCADE,
+    company_id integer REFERENCES companies (company_id) ON DELETE CASCADE,
+    airplane_id integer REFERENCES airplanes (airplane_id) ON DELETE CASCADE,
     number varchar(20),
     start_time timestamp NOT NULL,
     end_time timestamp NOT NULL,
@@ -81,22 +81,22 @@ CREATE TABLE flights_history(
 -- Создание таблицы с информацией о расписании
 DROP TABLE IF EXISTS schedule CASCADE;
 CREATE TABLE schedule(
-    id integer REFERENCES  flights(flight_id)
+    id integer REFERENCES  flights(flight_id) ON DELETE CASCADE
 );
 
 -- Создание таблицы с информацией о билетах
 DROP TABLE IF EXISTS tickets CASCADE;
 CREATE TABLE tickets(
     ticket_id serial PRIMARY KEY NOT NULL,
-    passenger_id integer REFERENCES passengers (passenger_id),
-    flight_id integer REFERENCES flights (flight_id),
+    passenger_id integer REFERENCES passengers (passenger_id) ON DELETE CASCADE,
+    flight_id integer REFERENCES flights (flight_id) ON DELETE CASCADE,
     number varchar(20) CHECK (number ~ '^[0-9]{1}[0-9]{1}[A-Z]{1}$')
 );
 
 --Создание таблицы с информацией о расписании работников
 DROP TABLE IF EXISTS schedule_employees;
 CREATE TABLE schedule_employees(
-    flight_id integer REFERENCES flights (flight_id),
-    employee_id integer REFERENCES employees (employee_id),
+    flight_id integer REFERENCES flights (flight_id) ON DELETE CASCADE,
+    employee_id integer REFERENCES employees (employee_id) ON DELETE CASCADE,
     PRIMARY KEY (flight_id, employee_id)
 );
