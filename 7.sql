@@ -46,16 +46,12 @@ CREATE VIEW view_flights AS
 DROP VIEW IF EXISTS view_flights_history;
 CREATE VIEW view_flights_history AS
     SELECT number as "number",
-           company_name as "company_name",
-           airplane_name as "airplane_name",
            start_time as "start_time",
            end_time as "end_time",
            start_city as "start_city",
            end_city as "end_city",
            update_time as "update_time"
-    FROM airport_db.flights_history f
-        INNER JOIN airport_db.companies c on f.company_id = c.company_id
-        INNER JOIN airport_db.airplanes a on a.airplane_id = f.airplane_id;
+    FROM airport_db.flights_history;
 
 --- passengers
 DROP VIEW IF EXISTS view_passengers;
@@ -87,9 +83,6 @@ CREATE VIEW view_schedule_employees AS
 DROP VIEW IF EXISTS view_tickets;
 CREATE VIEW view_tickets AS
     SELECT p.first_name || ' ' || p.last_name as "full_name",
-           t.number as "seat",
-           f.number as "flight_name",
-           f.start_time as "start_time"
+           t.number as "seat"
     FROM airport_db.tickets t
-        inner join airport_db.passengers p on t.passenger_id = p.passenger_id
-        inner join airport_db.flights f on t.flight_id = f.flight_id;
+        inner join airport_db.passengers p on t.passenger_id = p.passenger_id;
