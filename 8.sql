@@ -11,16 +11,20 @@ CREATE VIEW view_difficult_1 AS
     GROUP BY number
     ORDER BY count_updates;
 
--- ---
--- DROP VIEW IF EXISTS view_difficult_2;
--- CREATE VIEW view_difficult_2 AS
---     SELECT p.first_name || ' ' || p.last_name as "full_name",
---            t.number as "seat",
---            f.number as "flight_name",
---            f.start_time as "start_time"
---     FROM airport_db.tickets t
---         inner join airport_db.passengers p on t.passenger_id = p.passenger_id
---         inner join airport_db.flights f on t.flight_id = f.flight_id;
+-- Для каждого человека найти какую процентную долю от потраченных денег на билеты
+-- составляет затраты на билеты в конкретный город и отсортировать каждого человека по количество потраченных суммарно
+-- сбережений на перелеты
+DROP VIEW IF EXISTS view_difficult_2;
+CREATE VIEW view_difficult_2 AS
+    select
+        (first_name || ' ' || last_name) as full_name,
+        f.end_city,
+        t.cost,
+        (sum(t.cost) over (partition by first_name, last_name, f.end_city))
+         / (sum (t.cost) over(partition by first_name, last_name)) * 100 as share
+    from airport_db.passengers p
+        inner join airport_db.tickets t on p.passenger_id = t.passenger_id
+        inner join airport_db.flights f on t.flight_id = f.flight_id;
 
 -- Найти всех сотрудников, которые работали не на свою компанию и вывести количество рейсов,
 -- которые они выполнили в компанией конкурентом
