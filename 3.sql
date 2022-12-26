@@ -90,7 +90,8 @@ CREATE TABLE tickets(
     ticket_id serial PRIMARY KEY NOT NULL,
     passenger_id integer REFERENCES passengers (passenger_id) ON DELETE CASCADE,
     flight_id integer REFERENCES flights (flight_id) ON DELETE CASCADE,
-    number varchar(20) CHECK (number ~ '^[0-9]{1}[0-9]{1}[A-Z]{1}$')
+    number varchar(20) CHECK (number ~ '^[0-9]{1}[0-9]{1}[A-Z]{1}$'),
+    cost real DEFAULT 100
 );
 
 --Создание таблицы с информацией о расписании работников
