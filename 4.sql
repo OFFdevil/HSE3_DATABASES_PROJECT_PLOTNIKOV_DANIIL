@@ -160,29 +160,29 @@ INSERT INTO flights_history(flight_id, company_id, airplane_id, number, start_ti
             VALUES(10, 3, 2, 'ZU-6345', '2022-08-19 23:45:00', '2022-08-20 01:15:00', 'Rostov', 'Krasnodar');
 
 -- Add to tickets
-INSERT INTO tickets(passenger_id, flight_id, number)
-            VALUES(1, 2, '21D');
+INSERT INTO tickets(passenger_id, flight_id, number, cost)
+            VALUES(1, 2, '21D', 20);
 
-INSERT INTO tickets(passenger_id, flight_id, number)
-            VALUES(8, 6, '19E');
+INSERT INTO tickets(passenger_id, flight_id, number, cost)
+            VALUES(8, 6, '19E', 150);
 
-INSERT INTO tickets(passenger_id, flight_id, number)
-            VALUES(3, 5, '09A');
+INSERT INTO tickets(passenger_id, flight_id, number, cost)
+            VALUES(3, 5, '09A', 200);
 
-INSERT INTO tickets(passenger_id, flight_id, number)
-            VALUES(4, 5, '05B');
+INSERT INTO tickets(passenger_id, flight_id, number, cost)
+            VALUES(4, 5, '05B', 1200);
 
-INSERT INTO tickets(passenger_id, flight_id, number)
-            VALUES(7, 8, '08C');
+INSERT INTO tickets(passenger_id, flight_id, number, cost)
+            VALUES(7, 8, '08C', 1922);
 
-INSERT INTO tickets(passenger_id, flight_id, number)
-            VALUES(10, 4, '14A');
+INSERT INTO tickets(passenger_id, flight_id, number, cost)
+            VALUES(10, 4, '14A', 110);
 
-INSERT INTO tickets(passenger_id, flight_id, number)
-            VALUES(4, 8, '17E');
+INSERT INTO tickets(passenger_id, flight_id, number, cost)
+            VALUES(4, 8, '17E', 101);
 
-INSERT INTO tickets(passenger_id, flight_id, number)
-            VALUES(8, 5, '08D');
+INSERT INTO tickets(passenger_id, flight_id, number, cost)
+            VALUES(8, 5, '08D', 10);
 
 -- Add to schedule_employees
 INSERT INTO schedule_employees(flight_id, employee_id)
